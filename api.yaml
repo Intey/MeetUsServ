@@ -83,19 +83,50 @@ paths:
         404:
           description: user with given id not found
 
-  '/users/{id}/meets':
+  '/users/{uid}/meets':
     post:
       operationId: api.users.meets.post
       description: fetch user by id
       parameters:
-        - name: id
+        - name: uid
           in: path
           description: storage identifier
           schema:
-            $ref: "#/components/schemas/Meet"
+            type: integer
+        - name: meets
+          in: body
+          description: meets objects
+          schema:
+            type: array
+            items:
+              $ref: "#/components/schemas/Meet"
       responses:
         201:
           description: found user
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: "#/components/schemas/Meet"
+    get:
+      operationId: api.users.meets.search
+      description: get user meets data
+      parameters:
+        - name: uid
+          in: path
+          description: storage user identifier
+          schema:
+            type: integer
+      responses:
+        200:
+          description: found user
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: "#/components/schemas/Meet"
 
 components:
   schemas:
@@ -108,15 +139,13 @@ components:
           type: integer
           description: storage user id
     Meet:
-      type: array
-      items:
-        properties:
-          date:
-            type: date
-            description: "date, in which user can to meet. Format: YYYY-MM-DD"
-          timeRange:
-            type: string
-            pattern: '^\d{2}:\d{2} - \d{2}:\d{2}$'
-            description: "time range for day, in which user can meet"
+      properties:
+        date:
+          type: date
+          description: "date, in which user can to meet. Format: YYYY-MM-DD"
+        timeRange:
+          type: string
+          pattern: '^\d{2}:\d{2} - \d{2}:\d{2}$'
+          description: "time range for day, in which user can meet"
 
 
