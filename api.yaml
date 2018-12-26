@@ -1,0 +1,122 @@
+openapi: "3.0.0"
+info:
+  title: Simple API overview
+  version: 1.0.0
+
+servers:
+  - url: /api
+
+paths:
+  /users:
+    get:
+      description: get user from api
+      responses:
+        200:
+          description: returns user
+          content:
+            application/json:
+              schema:
+                required:
+                  - username
+                properties:
+                  username:
+                    type: string
+        404:
+          description: not found user
+    post:
+      description: add new user
+      parameters:
+        - name: user
+          in: body
+          description: user object
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/User"
+
+      responses:
+        200:
+          description: Created user with ID
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/User"
+
+  '/users/{id}':
+    get:
+      description: fetch user by id
+      parameters:
+        - name: id
+          in: path
+          description: storage identifier
+          schema:
+            type: integer
+      responses:
+        200:
+          description: found user
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/User"
+        404:
+          description: user with given id not found
+    put:
+      description: fetch user by id
+      parameters:
+        - name: id
+          in: path
+          description: storage identifier
+          schema:
+            type: integer
+        - name: user
+          in: body
+          description: new user name
+          schema:
+            $ref: "#/components/schemas/User"
+      responses:
+        200:
+          description: found user
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/User"
+        404:
+          description: user with given id not found
+
+  '/users/{id}/meets':
+    post:
+      operationId: api.users.meets.post
+      description: fetch user by id
+      parameters:
+        - name: id
+          in: path
+          description: storage identifier
+          schema:
+            $ref: "#/components/schemas/Meet"
+      responses:
+        201:
+          description: found user
+
+components:
+  schemas:
+    User:
+      properties:
+        username:
+          description: user name
+          type: string
+        id:
+          type: integer
+          description: storage user id
+    Meet:
+      type: array
+      items:
+        properties:
+          date:
+            type: date
+            description: "date, in which user can to meet. Format: YYYY-MM-DD"
+          timeRange:
+            type: string
+            pattern: '^\d{2}:\d{2} - \d{2}:\d{2}$'
+            description: "time range for day, in which user can meet"
+
+
