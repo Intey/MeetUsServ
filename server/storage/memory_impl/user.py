@@ -12,7 +12,7 @@ class MemoryUserStorage(IUserStorage):
     """
     Contains users in memory. When server stops - all users will be lost
     """
-    def __init__(self):
+    def __init__(self) -> None:
         self.users: t.Dict[int, User] = dict()
         self.meets: t.Dict[int, t.List[Meet]] = dict()
         self.last_id = 1
@@ -57,6 +57,8 @@ class MemoryUserStorage(IUserStorage):
             meet_ = deepcopy(meet)
             meet_.id = self.last_meet_id
             self.last_meet_id += 1
+            if self.meets.get(user_id) is None:
+                self.meets[user_id] = []
             self.meets[user_id].append(meet_)
         return self.meets[user_id]
 

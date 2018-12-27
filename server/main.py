@@ -4,13 +4,14 @@ import dataclasses
 import connexion
 from connexion.resolver import RestyResolver
 from connexion.apps.flask_app import FlaskJSONEncoder
+from flask_cors import CORS
 
 
 class EnhancedJSONEncoder(FlaskJSONEncoder):
-        def default(self, o):
-            if dataclasses.is_dataclass(o):
-                return dataclasses.asdict(o)
-            return super().default(o)
+    def default(self, o):
+        if dataclasses.is_dataclass(o):
+            return dataclasses.asdict(o)
+        return super().default(o)
 
 def main():
     logging.basicConfig(level=logging.INFO)
@@ -23,4 +24,5 @@ def main():
                         strict_validation=True,
                         resolver=RestyResolver('api'),
                         )
+    CORS(app)
     app.run(port=8000, debug=True)

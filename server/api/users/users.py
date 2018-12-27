@@ -25,8 +25,3 @@ def put(id, body):
     LOGGER.info('put user api')
     user = User(id=id, **body['user'])
     return STORAGE.save_user(user)
-
-
-def post_meets(id, body):
-    pass
-
