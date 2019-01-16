@@ -141,7 +141,7 @@ components:
     Meet:
       properties:
         date:
-          type: date
+          type: data
           description: "date, in which user can to meet. Format: YYYY-MM-DD"
         timeRange:
           type: string

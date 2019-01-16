@@ -1,21 +1,24 @@
 from logging import getLogger
-from storage import UserStorage, User, Meet
+from storage import User, Meet
+
+from storage.runtime import user_store, meet_store
 
 LOGGER = getLogger(__name__)
 
-STORAGE = UserStorage()
-
 
 def post(uid: int, body: dict):
-    meets = []
+    if user_store.get(id=uid) is None:
+        return dict(error=f"user {uid} doesn't exist")
+
+    results = []
     for meet in body['meets']:
-        print(meet)
-        meets.append(Meet(date=meet['date'], timeRange=meet['timeRange']))
+        meet_ = Meet(date=meet['date'], timeRange=meet['timeRange'])
+        results.append(meet_store.create(meet_))
 
-    result = STORAGE.create_meets_for_user(uid, meets)
-    return result
+    return results
 
 
-def search(uid):
-    result = STORAGE.get_meets_for_user(uid)
+
+def search(uid: int):
+    result = user_store.all(user_id=uid)
     return result
