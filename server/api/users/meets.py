@@ -13,12 +13,12 @@ def post(uid: int, body: dict):
     results = []
     for meet in body['meets']:
         meet_ = Meet(date=meet['date'], timeRange=meet['timeRange'])
+        meet_.user_id = uid
         results.append(meet_store.create(meet_))
 
     return results
 
 
-
 def search(uid: int):
-    result = user_store.all(user_id=uid)
+    result = meet_store.all(user_id=uid)
     return result

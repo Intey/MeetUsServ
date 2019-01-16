@@ -5,6 +5,7 @@ from copy import deepcopy
 from storage import IStorage
 
 Object = t.TypeVar('Object')
+
 KWargs = t.Dict[str, t.Any]
 
 
@@ -61,4 +62,4 @@ class BaseStorage(t.Generic[Object], IStorage[Object]):
         """
         for item in self.items:
             pass # todo: search for a each key and val of item
-        return self.items
+        return list(self.items.values())

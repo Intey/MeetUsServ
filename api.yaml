@@ -141,11 +141,12 @@ components:
     Meet:
       properties:
         date:
-          type: data
+          type: string
           description: "date, in which user can to meet. Format: YYYY-MM-DD"
+          pattern: '^\d{4}-\d\d-\d\d'
         timeRange:
           type: string
-          pattern: '^\d{2}:\d{2} - \d{2}:\d{2}$'
+          pattern: '^\d{2}:\d{2}-\d{2}:\d{2}$'
           description: "time range for day, in which user can meet"
 
 
