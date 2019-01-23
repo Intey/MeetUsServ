@@ -83,50 +83,89 @@ paths:
         404:
           description: user with given id not found
 
-  '/users/{uid}/meets':
+  '/users/{id}/meets':
     post:
-      operationId: api.users.meets.post
-      description: fetch user by id
+      description: create meet for user
+      operationId: api.meets.post
       parameters:
-        - name: uid
+        - name: id
           in: path
-          description: storage identifier
+          description: storage user identifier
           schema:
             type: integer
-        - name: meets
+        - name: name
           in: body
-          description: meets objects
+          description: Name of meet. Describes the target of meet.
           schema:
-            type: array
-            items:
-              $ref: "#/components/schemas/Meet"
+            type: str
       responses:
         201:
-          description: found user
+          description: created meet
           content:
             application/json:
               schema:
-                type: array
-                items:
-                  $ref: "#/components/schemas/Meet"
+                $ref: "#/components/schemas/Meet"
     get:
-      operationId: api.users.meets.search
-      description: get user meets data
+      operationId: api.meets.search
+      description: get user meets
       parameters:
-        - name: uid
+        - name: id
           in: path
           description: storage user identifier
           schema:
             type: integer
       responses:
         200:
-          description: found user
+          description: found meets for user with id
           content:
             application/json:
               schema:
                 type: array
                 items:
                   $ref: "#/components/schemas/Meet"
+
+  '/users/{id}/meets/{mid}/times':
+    parameters:
+      - name: id
+        in: path
+        description: storage identifier of user
+        schema:
+          type: integer
+      - name: mid
+        in: path
+        description: storage identifier of meet
+        schema:
+          type: integer
+    post:
+      description: create user time in meet, when he can meet
+      operationId: api.meets.post
+      parameters:
+        - name: times
+          in: body
+          description: Array of time ranges for date, when user can meet
+          schema:
+            type: array
+            items:
+              $ref: "#/components/schemas/Meet"
+      responses:
+        201:
+          description: created meet
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Meet"
+    get:
+      operationId: api.meets.times.search
+      responses:
+        200:
+          description: user(id) times of meet
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: "#/components/schemas/MeetTime"
+
 
 components:
   schemas:
@@ -139,6 +178,11 @@ components:
           type: integer
           description: storage user id
     Meet:
+      properties:
+        name:
+          type: string
+          description: "name of meet"
+    MeetTime:
       properties:
         date:
           type: string
