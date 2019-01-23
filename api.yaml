@@ -125,21 +125,20 @@ paths:
                   $ref: "#/components/schemas/Meet"
 
   '/users/{id}/meets/{mid}/times':
-    parameters:
-      - name: id
-        in: path
-        description: storage identifier of user
-        schema:
-          type: integer
-      - name: mid
-        in: path
-        description: storage identifier of meet
-        schema:
-          type: integer
     post:
       description: create user time in meet, when he can meet
-      operationId: api.meets.post
+      operationId: api.meets.times.post
       parameters:
+        - name: id
+          in: path
+          description: storage identifier of user
+          schema:
+            type: integer
+        - name: mid
+          in: path
+          description: storage identifier of meet
+          schema:
+            type: integer
         - name: times
           in: body
           description: Array of time ranges for date, when user can meet
@@ -156,6 +155,17 @@ paths:
                 $ref: "#/components/schemas/Meet"
     get:
       operationId: api.meets.times.search
+      parameters:
+        - name: id
+          in: path
+          description: storage identifier of user
+          schema:
+            type: integer
+        - name: mid
+          in: path
+          description: storage identifier of meet
+          schema:
+            type: integer
       responses:
         200:
           description: user(id) times of meet
@@ -192,5 +202,3 @@ components:
           type: string
           pattern: '^\d{2}:\d{2}-\d{2}:\d{2}$'
           description: "time range for day, in which user can meet"
-
-
