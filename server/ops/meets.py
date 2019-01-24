@@ -3,6 +3,7 @@ from storage.istorage import IStorage
 from storage.user import User
 from storage.meet import Meet
 from storage.meet_datetime import MeetDateTime as MeetTime
+from storage.storage import Storage
 from .exception import OperationException
 
 
@@ -14,25 +15,15 @@ def create_meet(user_store: IStorage[User], meet_store: IStorage[Meet],
 
 
 # with separated storage
-def add_time_ranges_for_meet(user_store: IStorage[User], meet_store: IStorage[Meet],
-                             meet_times_store: IStorage[MeetTime],
-                             meet_id: int, user_id: int, times: t.List[MeetTime]) -> t.List[MeetTime]:
-    meet = meet_store.get(id=meet_id)
-    result = []
-    for time in times:
-        obj = meet_times_store.create(**time, meet_id=meet_id, user_id=user_id)
-        result.append(obj)
-    return result
-
-
-#with meet_store
-def add_time_ranges_for_meet(user_store: IStorage[User], meet_store: IStorage[Meet],
+def add_time_ranges_for_meet(storage: Storage,
                              meet_id: int, user_id: int,
                              times: t.List[MeetTime]) -> t.List[MeetTime]:
-    meet = meet_store.get(id=meet_id)
-    results = meet_store.add_times_for_meet(id=meet_id, times=times,
-                                            user_id=user_id)
-    return results
+    if storage.user_store.get(id=user_id) is None:
+        raise OperationException(f"user {user_id} doesn't exist")
+    created_times = storage.create_time_for_meet(meet_id, user_id, times)
+    return created_times
+
+
 
 
 def create_meets_for_user(user_store: IStorage[User], meet_store: IStorage[Meet],
